@@ -78,7 +78,7 @@
 
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
-
+\usepackage{subfigure}
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -109,17 +109,108 @@
 %----------------------------------------------------------------------------------------
 
 %------------------------------------------------
-\section{First Section} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+\section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
-\subsection{Subsection Example} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\begin{frame}
+\frametitle{Illustrative example}
+\begin{figure}
+\includegraphics[scale = 0.5]{Images/Illustrative_example}\\
+\caption{Illustrative example}
+\end{figure}
+Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are invoked concurrently
+\end{frame}
+
+
+%------------------------------------------------
+
+%------------------------------------------------
+\section{Motivation} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
 
 \begin{frame}
-\frametitle{Paragraphs of Text}
-Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
-
-Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
+\frametitle{Motivation}
+\begin{figure}[ht!]
+     \begin{center}
+%
+        \subfigure[Implementation of sampleBootstrap]{%
+            \label{fig:first}
+           \includegraphics[scale = 0.3]{Images/sampleBootStrap}
+        }%
+        \subfigure[Sample usage of sampleBootstrap]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/exampleSampleBootStrap}
+        }\\ %  ------- End of the first row ----------------------%
+%
+    \end{center}
+    \caption{%
+        Motivation from the colt library
+     }%
+   \label{fig:subfigures}
+\end{figure}
 \end{frame}
+
+\begin{frame}
+\frametitle{Motivation}
+\begin{figure}[ht!]
+     \begin{center}
+%
+        \subfigure[Detected deadlocks]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/colt_detected}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure[Test case synthesized by OMEN]{%
+            \label{fig:third}
+           \includegraphics[scale = 0.3]{Images/testCaseOMEN}
+        }%
+%
+    \end{center}
+    \caption{%
+        Motivation from the colt library
+     }%
+   \label{fig:subfigures}
+\end{figure}
+
+\end{frame}
+
+\subsection{Design}
+\begin{frame}
+\frametitle{Design}
+\begin{figure}[ht!]
+     \begin{center}
+%
+       
+      \includegraphics[scale = 0.5]{Images/design}
+        
+%
+    \end{center}
+    \caption{%
+        Architecture of OMEN
+     }%
+   \label{fig:subfigures}
+\end{figure}
+
+\end{frame}
+
+\subsection{Running example}
+\begin{frame}
+\frametitle{Design}
+\begin{figure}[ht!]
+     \begin{center}
+%
+       
+      \includegraphics[scale = 0.5]{Images/design}
+        
+%
+    \end{center}
+    \caption{%
+        Architecture of OMEN
+     }%
+   \label{fig:subfigures}
+\end{figure}
+
+\end{frame}
+
 
 %------------------------------------------------
 
