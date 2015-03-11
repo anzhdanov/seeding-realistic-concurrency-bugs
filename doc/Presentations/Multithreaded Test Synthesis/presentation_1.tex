@@ -79,6 +79,8 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{mathtools}
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -128,27 +130,27 @@ Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are 
 \section{Motivation} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
-\begin{frame}
-\frametitle{Motivation}
-\begin{figure}[ht!]
-     \begin{center}
+%\begin{frame}
+%\frametitle{Motivation}
+%\begin{figure}[ht!]
+%     \begin{center}
 %
-        \subfigure[Implementation of sampleBootstrap]{%
-            \label{fig:first}
-           \includegraphics[scale = 0.3]{Images/sampleBootStrap}
-        }%
-        \subfigure[Sample usage of sampleBootstrap]{%
-           \label{fig:second}
-           \includegraphics[scale = 0.3]{Images/exampleSampleBootStrap}
-        }\\ %  ------- End of the first row ----------------------%
+%        \subfigure[Implementation of sampleBootstrap]{%
+%            \label{fig:first}
+%           \includegraphics[scale = 0.3]{Images/sampleBootStrap}
+%        }%
+%        \subfigure[Sample usage of sampleBootstrap]{%
+%           \label{fig:second}
+%           \includegraphics[scale = 0.3]{Images/exampleSampleBootStrap}
+%        }\\ %  ------- End of the first row ----------------------%
 %
-    \end{center}
-    \caption{%
-        Motivation from the colt library
-     }%
-   \label{fig:subfigures}
-\end{figure}
-\end{frame}
+%    \end{center}
+%    \caption{%
+%        Motivation from the colt library
+%     }%
+%  \label{fig:subfigures}
+%\end{figure}
+%\end{frame}
 
 \begin{frame}
 \frametitle{Motivation}
@@ -173,14 +175,14 @@ Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are 
 
 \end{frame}
 
-\subsection{Design}
+\section{Design}
 \begin{frame}
 \frametitle{Design}
 \begin{figure}[ht!]
      \begin{center}
 %
        
-      \includegraphics[scale = 0.5]{Images/design}
+      \includegraphics[scale = 0.4]{Images/design}
         
 %
     \end{center}
@@ -199,19 +201,90 @@ Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are 
      \begin{center}
 %
        
-      \includegraphics[scale = 0.5]{Images/design}
+      \includegraphics[scale = 0.4]{Images/running_example}
         
 %
     \end{center}
     \caption{%
-        Architecture of OMEN
+        A running example
      }%
    \label{fig:subfigures}
 \end{figure}
+\end{frame}
 
+\begin{frame}
+\frametitle{Lock dependency relation}
+The lock node is defined $\eta = (\tau, s, H, TI) $
+\begin{itemize}
+\item Lock type $(\tau)$: data type of the lock object
+\item Source location $(s)$: source location of lock
+\item Held locks $(H)$: set of objects that are currently held
+\item Test and trace location identifier (TI): pair $(I_i, index)$, where $I_i$ is a testcase, $index$ is an index of the lock acquisition
+\end{itemize}
+\end{frame}
+
+\subsection{Logger}
+\begin{frame}
+\frametitle{Logger}
+\begin{figure}[ht!]
+     \begin{center}
+%
+       
+       \subfigure[Partial execution trace]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/exec_trace}
+        }
+        \subfigure[D after executing $I_1$, $I_2$]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/DI1I2}
+        }
+        \\ %  ------- End of the first row ----------------------%
+        %\subfigure[Lock types]{%
+        %    \label{fig:third}
+        %   \includegraphics[scale = 0.3]{Images/lock_dependency}
+        %}%
+        
+%
+    \end{center}
+    \caption{%
+        Logger
+     }%
+   \label{fig:subfigures}
+\end{figure}
+\end{frame}
+
+\subsection{Cycle detector}
+\begin{frame}
+\frametitle{Cycle detector}
+\begin{figure}[ht!]
+     \begin{center}
+%
+       
+       \subfigure[Algorithm of cycle detector]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/alg_cycle_det}
+        }
+        \subfigure[Paths and cycles generated for the running example]{%
+           \label{fig:second}
+           \includegraphics[scale = 0.3]{Images/paths_and_cycles}
+        }
+        \\ %  ------- End of the first row ----------------------%
+        %\subfigure[Lock types]{%
+        %    \label{fig:third}
+        %   \includegraphics[scale = 0.3]{Images/lock_dependency}
+        %}%
+        
+%
+    \end{center}
+    \caption{%
+        Cycle detector
+     }%
+   \label{fig:subfigures}
+\end{figure}
 \end{frame}
 
 
+    
 %------------------------------------------------
 
 \begin{frame}
