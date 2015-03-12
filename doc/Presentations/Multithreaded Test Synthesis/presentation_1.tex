@@ -123,6 +123,17 @@
 Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are invoked concurrently
 \end{frame}
 
+\begin{frame}
+\frametitle{Theirs contribution}
+
+    \begin{itemize}
+    \item automatic multithreaded test synthesis for deadlock detection
+    \item identification of method call queues and their invocation context
+    \item design and implemetation of OMEN
+    \item evaluation on several multithreaded java libraries
+    \end{itemize}
+
+\end{frame}
 
 %------------------------------------------------
 
@@ -196,7 +207,7 @@ Implementation of A is not thread-safe: testFoo(a1, a2) and testFoo(a2, a1) are 
 
 \subsection{Running example}
 \begin{frame}
-\frametitle{Design}
+\frametitle{Running example}
 \begin{figure}[ht!]
      \begin{center}
 %
@@ -335,6 +346,24 @@ The lock node is defined $\eta = (\tau, s, H, TI) $
         Rules for identification of relevant parameters. $\oplus$ is a concatentation of an element to a sequence.
      }%
    \label{fig:subfigures}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Constraints generation}
+ For a cycle $\theta = (\eta_1, \eta_2,..., \eta_k )$, where $\eta_i^f \to \eta_i$\\
+ the following constraint set $C$ is generated for all $i \in [1,k]$:\\
+ \begin{itemize}
+  \item $P(\eta_{i-1}) \equiv P(\eta_i^f)$, if $i \in [2,k]$
+  \item $P(\eta_k) \equiv P(\eta_i^f)$, otherwise
+ \end{itemize}
+ \begin{figure}[ht!]
+     
+  \includegraphics[scale = 0.3]{Images/cycle.png}
+       
+  \caption{%
+        Intuitive explanation (cycle)
+  }%
 \end{figure}
 \end{frame}
 
