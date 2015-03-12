@@ -414,13 +414,21 @@ The lock node is defined $\eta = (\tau, s, H, TI) $
 
 \section{Implementation}
 \begin{frame}
- OMEN is written in Java to synthesize multithreaded tests for Java libraries.
- It uses:
+\frametitle{Implementation}
+Instrumentation:
  \begin{enumerate}
-  \item $soot$ for bytecode analysis
-  \item $iGoodLock$ to detect deadlocks
+  \item $soot$ to generate execution traces
  \end{enumerate}
-
+ 
+Cycle detection:
+ \begin{enumerate}
+  \item both types and subtypes
+  \item each cycle can encode multiple deadlocks
+  \item $iGoodLock$ for the deadlock detection
+  \item random test case to identify a method invocation
+ \end{enumerate}
+ 
+ 
 \end{frame}
 
 \section{Evaluation}
@@ -482,7 +490,8 @@ The lock node is defined $\eta = (\tau, s, H, TI) $
     \begin{enumerate}
       \item false negatives (dynamic approach)
       \item failed to detect some deadlocks for an automatically generated test suite, on the other hand, manually written tests do not always have a good code coverage
-      \item ...
+      \item locks under consideration could be influenced by other method invocations
+      \item does not handle aliasing and collections
     \end{enumerate}
     \end{itemize}
 
