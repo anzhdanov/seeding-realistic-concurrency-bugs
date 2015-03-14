@@ -1,0 +1,35 @@
+1. Abstract
+   1.1 Acceleration of manual auditing for security flaws detection
+   1.2 Insufficient input validation, false checks
+   1.3 Code tainting, identification of anomalous or missing conditions linked  to security critical objects
+2. Introduction
+   2.1 Automatic approach for finding arbitrary vulnerabilities cannot exist
+   2.2 research is focused on discovering of specific types of vulnerabilities
+   2.3 Usage of potentially such as strcpy and strcat
+   2.4 Fuzzing and taint analysis
+   2.5 Tool allows:
+       2.5.1 Identification of missing checks
+       2.5.2 Anomaly detection and conditions
+       2.5.3 Top-down and bottom-up analysis
+       2.5.4 Suggestion of corrections
+3. Missing-check vulnerabilities
+   3.1 Checks implementing security logic
+       3.1.1  Validation of parameters and global variables
+   3.2  Checks ensuring secure API usage
+   	3.2.1 checks to ensure secure operations on internal and external API
+4. Identifying missing checks
+   4.1 Robust parsing
+       4.1.1 Extracts conditions, assignments and API symbols
+       	     4.1.1.1 Sources and sinks:function parameters, function calls, global and local variables
+	     4.1.1.2 
+       4.1.2 Based on island grammar, provides AST
+
+   4.2 Neighbourhood discovery
+       4.2.1 Identification of functions which operate on the same context
+   4.3 Lightweight tainting
+       4.3.1 Checks associated with a given source or sink (neighbours: top-down, bottom-up) 
+   4.4 Embedding of functions
+       4.4.1 Selected functions are embedded into a vector space using the tainted conditions (ML)
+   4.5 Anomaly detection
+       4.5.1   geometrical search of missing checks, normality over the functions, anomalous checks can be identified by large distances
+   	  	    
