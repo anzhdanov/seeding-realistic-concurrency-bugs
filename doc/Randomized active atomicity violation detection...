@@ -1,0 +1,51 @@
+1. Abstract
+   1.1 dynamic analysis tool to detect atomicity violations
+   1.2 the technique modifies the existing java thread scheduler to create atomicity violations
+   1.3 Can create a real atomicity violation
+   1.4 Replay an atomicity violation using the same random seed
+2. Introduction
+   2.1 Contributions:
+       2.1.1 Identification of special atomicity violation pattern
+       2.1.2 A randomized dynamic analysis technique
+       2.1.3 Implemented AtomFuzzer in java
+   2.2 Features of AtomFuzzer:
+       2.2.1 Classifies real atomicity violation problems from false alarms
+       2.2.2 Inexpensive replay of atomicity violation
+       2.2.3 Demonstrates if an atomicity violation can cause an exception or a crash
+       2.2.4 No false atomicity violation reports
+       2.2.5 Parallel
+3. Algorithm
+   3.1 Definitions
+       3.1.1 S is a set of states
+       3.1.2 s0 is an initial state           t
+       3.1.3 T is a set of all transitions: s -> s'
+       3.1.4 Enabled(s) is the set of transitions
+       3.1.5 Alive(s) is the set of threads
+       3.1.6 Deadlock: Enabled(s) is empty, Alive(s) is non-empty
+       3.1.7 Algorithm:
+       	     Inputs: the initial state s0
+       	     s := s0
+       	     while Enabled(s) != 0 do
+       	     	   t := a random transition in Enabled(s)
+	     	   s := Execute(s,t)
+	   end while
+	   if Alive(s) != 0 then
+	       print "Error: actual deadlock found"
+	   end if
+	3.1.8	t1            t2
+	      p1 -> p1(l1), p2 -> p2(l2) t1 and t2 are independent if p1 and p2 under t1 and t2
+	      acquire different locks
+	3.1.9 Dependent transitions are not independent
+	3.1.10 tau = t1t2...tn is a transition sequence
+	      t1   t2      tn
+	if s1 -> s2 -> ... -> Sn+1
+	
+	1. if ti and tj are dependent and 1 <= i <= j <= n, then ti<=tj
+	2. <= is transitively closed
+	3.1.8 Causal atomicity:
+	      3.1.8.1 t1, t3 are transitions of the same thread within the same block
+	      3.1.8.2 t2 is a transition of another thread
+	      3.1.8.3 if t2 is after t1, then it after t3 also
+	  
+
+   
