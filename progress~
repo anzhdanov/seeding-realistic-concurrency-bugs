@@ -1,0 +1,10 @@
+Tuesday 17 March, 2015
+	Discussion:
+		-Finding and Reproducing Heisenbugs in Concurrent Programs:limitations
+		-CHUCKY:limitations and ideas
+	TO-DO:
+		-5 concurrency bugs from real java projects
+		-try to reproduce the bugs
+		-reading
+		-switch to cased git
+		-create a progress file

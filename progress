@@ -1,0 +1,12 @@
+Tuesday 17 March, 2015
+	Discussion:
+		-Finding and Reproducing Heisenbugs in Concurrent Programs:limitations
+		-CHUCKY:limitations and ideas
+		-interesting article: DynaMine: Finding Common Error Patterns
+		by Mining Software Revision Histories
+	TO-DO:
+		-5 concurrency bugs from real java projects
+		-try to reproduce the bugs
+		-reading
+		-switch to cased git
+		-create a progress file
