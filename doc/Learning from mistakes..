@@ -1,0 +1,7 @@
+1. Abstract
+   1.1 Concurrent bugs from open source applications(MySQL, Apache, Mozilla, OpenOffice)
+   1.2 Findings:
+       1.2.1 1/3 of nondeadlocks are caused by violation of programmers order intentions
+       1.2.2 34% of nondeadlocks involve multiple variables
+       1.2.3 Testing of concurrent programms can be focused on small number of memory accesses
+       1.2.4 73% are hard fixes (difficult reasoning)
