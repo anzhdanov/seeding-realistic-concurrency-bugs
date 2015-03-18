@@ -42,10 +42,82 @@
 	
 	1. if ti and tj are dependent and 1 <= i <= j <= n, then ti<=tj
 	2. <= is transitively closed
-	3.1.8 Causal atomicity:
+	3.1.8 Causal atomicity violation:
 	      3.1.8.1 t1, t3 are transitions of the same thread within the same block
 	      3.1.8.2 t2 is a transition of another thread
-	      3.1.8.3 if t2 is after t1, then it after t3 also
+	      3.1.8.3 if t1 is before t2, then t2 is before t3
+   3.2 the randomized active atomicity violation algorithm
+       3.2.1 AtomicEnter(p), p enters an atomic block
+       3.2.2 AtomicExit(p), p exits an atomic block
+       3.2.3 Acquire(p, L), p acquires lock L
+       3.2.4 Algorithm AtomFuzzer
+       	     Inputs: the initial state s0
+	     paused:= alreadyAcquired:=insideAtomic:=0
+	     while Enabled(s) != 0 do
+	     	   t := a random transition in Enabled(s) such that
+		   any p, L.(p,L,t) !e paused
+		   if t = AtomicEnter(p) then
+		      s:=Execute(s,t)
+		      add p to insideAtomic
+		   else if t = AtomicExit(p) then
+		   	s:=Execute(s,t)
+			remove p from insideAtomic
+			remove any L.(p,L) from already acquired
+		   else if t = ACQUIRE(p, L) then
+		   	if p e insideAtomic then
+			   if (p, L) e alreadyAcquired then
+			      add (p, L, t) in paused with probability q// q is 0,5
+			      print "WARNING: Atomicity violation possible"
+			   else
+			       add(p, L) to alreadyAcquired
+			       s:=Execute(s,t)
+			   end if
+			else
+			   s:=Execute(s,t)
+			end if
+			if Ep',t'.(p',L,t') e paused and p!=p' then
+			   remove(p', L, t') from paused
+			   print "Error: Atomicity violation detected"
+			end if
+		   end if
+		   if |paused| = |Enabled(s)| then
+	               remove a random element from paused
+	           end if
+		end while
+		if Alive(s) != 0 then
+		   print "ERROR: actual deadlock found"
+		end if
+4. Advantages of AtomFuzzer
+   4.1 
+5. Implementation
+   5.1 AtomFuzzer is part of CalFuzzer, allows to specify a code block atomic
+   5.2 instrumentation(SOOT) to control relevant transitions and scheduler
+   5.3 escape deadlocks and livelocks
+   5.4 Using semaphores to control java thread scheduler
+6. Empirical evaluation
+   6.1 programs: cache4j, sor, hedc, weblech, jspider, jigsaw
+   6.2 collections: Vector, ArrayList, LinkedList, HashSet, TreeSet
+   6.3 libraries: Apache Commons-Collections, Google Collections Library
+   6.4 create two objects, set of threads, execute methods in threads concurrently
+   6.5 assumption: every block marked synchronized is assumed to be atomic
+   6.6 Results:
+       6.6.1 21(14) real atomicity violations(exceptions thrown)
+   6.7 Bugs found:
+       6.7.1 containsAll and removeAll methods of AbstractCollections
+       6.7.2 Apache Commons-Collections lib: non-synchronized use of iterators
+   6.8 Icompleteness analysis:
+       6.8.1 AtomFuzzer is incomplete
+       (no guarantee: bug is a bug, error is an error and warning is a warning)
+       6.8.2 Warnings are not errors: 
+       	     6.8.2.1 main thread releases and acquires a lock before
+      	      creating any thread
+       	     6.8.2.2 acquiring and releasing locks inside synchronized blocks
+	6.8.3 errors are not bugs:
+	      6.8.3.1 heuristic does not match user intention in some cases
+	      6.8.3.2 benign errors
+
+
+       
 	  
 
    

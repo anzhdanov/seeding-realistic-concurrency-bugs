@@ -21,15 +21,63 @@
    4.1 Robust parsing
        4.1.1 Extracts conditions, assignments and API symbols
        	     4.1.1.1 Sources and sinks:function parameters, function calls, global and local variables
-	     4.1.1.2 
+	     4.1.1.2 API symbols: parameter types, names of all functions...
+	     4.1.1.3 Assignments: store a subtree of AST for each assignment (left and right value)
+	     4.1.1.4 Conditions: all expressions of control statements
+	     4.1.1.5 Determine patterns for sources and sinks
        4.1.2 Based on island grammar, provides AST
 
    4.2 Neighbourhood discovery
-       4.2.1 Identification of functions which operate on the same context
-   4.3 Lightweight tainting
+       4.2.1 Identification of functions which operate on the same context (using the same API symbols)
+       4.2.2 Bag-of-words model
+       4.2.3 X = {x1,...,xm}, Phi:X -> R^|A|, phi(x) -> (I(x,a)*TFIDF(x,a,X))a \in A
+       	        1 if x contains API symbol a
+       I(x,a) = 
+       	      	0 otherwise
+	TFIDF(x, a, X) standard weighting term from information retrieval
+	4.2.4 Extract functions, calculate cosine distance to Phi(x), select k nearest
+   4.3 Lightweight tainting (unrelated checks discarding)
        4.3.1 Checks associated with a given source or sink (neighbours: top-down, bottom-up) 
+       4.3.2 Dependency modeling: nodes are identifiers, edges are assignments
+       4.3.3 Taint propagation: top-down, bottom-up 
    4.4 Embedding of functions
        4.4.1 Selected functions are embedded into a vector space using the tainted conditions (ML)
+       4.4.2 Normalization:
+       	     4.4.2.1 Removal of negations: negations are removed and compare operator is replaced
+	     by the symbol $cmp, numbers are replaced by $num.
+	     4.4.2.2 return values of sources  and sinks are replaced with $ret, any variables dir.
+	     influencing its arguments are renamed to $arg (comparing regardless names)
+	     4.4.2.3 Embedding:
+	     	     4.4.2.3.1 E is a set of all normalized expressions and phi
+		     phi : X -> R^|E|, phi(x) |-> (I(x,e)) e C- E
+		     	 1 of x contains e in a condition
+		     I = 
+		       	 0 otherwise
+		4.4.2.4 hash maps or sorted arrays 
    4.5 Anomaly detection
        4.5.1   geometrical search of missing checks, normality over the functions, anomalous checks can be identified by large distances
+       	       4.5.1.1 Model of normality quantifiying the importance of each expression is derived from the embedded neighbours (sic!)
+		4.5.1.2 Determine checks that are present in most neighbours but are missing in the examined functions (!)
+		4.5.1.3 Anomaly score can be calculated
+		4.5.1.4 A center of mass of all embedded neighbor vectors
+		4.5.1.5 mu in R^|E|, mu = 1/|N| * Sigma_(n in N) Phi(n)
+		4.5.1.6 Identification of missing checks is easy d in R^|E|, d = mu - phi(x), where phi(x) is embedded vector function
+		4.5.1.7 Calculate an anomaly score: f(x) = ||mu - phi(x)||inf = max_( e in E )(mu_e - I(x,e)) - largest coefficient of the vector d
+5. Empirical evaluation
+   5.1 Missing check detection
+       5.1.1 Firefox: use-after-free vulnerability
+       5.1.2 Linux: missing check before setting ACL
+       5.1.3 LibPNG: memory corruption
+       5.1.4 LibTiff: stack-based buffer-overflows
+       5.1.5 Pidgin: denial-of-service vulnerability
+       5.1.6 Almost all missing checks are detected with k = 20 at det. rate of 96%
+       5.1.7 k = 25 all vulnerabilities are detected without false positives
+  5.2 Discovery of vulerabilities
+      5.2.1 LibTiff case study: integer overflow -> heap-based, NULL pointer dereferenciations(DoS), malloc check
+      5.2.2 Pidgin case study: NULL passed to atoi, NULL to strchar
+6. Limitations
+   6.1 finding vulnerabilities in stable code
+   6.2 combinig technique with the data flow analysis and symbolic execution is an interesting future research
+      	    
+
    	  	    
