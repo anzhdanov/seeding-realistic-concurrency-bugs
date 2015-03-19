@@ -5,3 +5,52 @@
        1.2.2 34% of nondeadlocks involve multiple variables
        1.2.3 Testing of concurrent programms can be focused on small number of memory accesses
        1.2.4 73% are hard fixes (difficult reasoning)
+2. Introduction
+   2.1 Concurrency bug detection:
+       2.1.1 Data race bugs and deadlock bugs
+       2.1.2 Questions:
+       	     2.1.2.1 can existing tools detect all real-world concurrent bugs
+	     2.1.2.2 how helpful are existing tools of diagnosing?
+   2.2 Concurrent program testing and model checking
+       2.2.1 Can we selectively test a small number of representative interleavings
+       ans still expose most of the concurrency bugs?
+       2.2.2 Manifestation conditions: how many threads, variables, how many accesses
+       2.2.3 Concurrent programming language design:
+       	     2.2.3.1 What portion of bugs can be avoided using TM?
+	     2.2.3.2 What are the real world concerns that TM design needs to pay attention to?
+	     2.2.3.3 What other programming languages supports besides TM?
+       2.2.4 lack of a good real-world conc. bug characteristic study:
+       	     2.2.4.1 It is difficult to collect real-world concurrency bugs
+	     2.2.4.2 Concurrency bugs are not easy to understand
+   2.3 Contributions
+       2.3.1 First real-world concurrency study
+       2.3.2 Examine: bug patterns, manifestations, fix strategies
+3. Methodology
+   3.1 Bug sources
+       3.1.1 MySQL, Apache, Mozilla, OpenOffice
+       3.1.2 Bugs:
+       	     3.1.2.1 Keywords: "race(s)", "deadlock(s)", "synchronization(s)",
+	     "concurrency", "lock(s)", "mutex(es)", "atomic", "compete(s)"
+       3.1.3 Characteristic categories
+       	     3.1.3.1 bug pattern
+	     	    3.1.3.1.1 non-deadlock concurrency: atomicity-violation bugs, order-violation bugs, other
+		     
+	     3.1.3.2 manifestation
+	     	    3.1.3.2.1 study the required condition
+             3.1.3.3 final patch fix strategy
+       3.1.4 threats to validity
+       	     3.1.4.1 4 server and client-based concurrent applications written in C/C++
+4. Bug pattern study
+   4.1 Finding 1:
+       4.1.1  Most (72 out of 74) of the examined non-deadlock concurrency bugs are covered by two simple
+       patterns: atomicity violation and order violation
+       4.1.2 Concurrent program bug detection, testing and language design should first focus on these two
+       major bug patterns
+   4.2 Finding 2:
+       4.2.1 A significant number (24 out of 74) of the examined non-deadlock concurrency bugs are order bugs,
+       which are not addressed by prvious bug detection work
+       4.2.2 
+   
+
+
+	     
