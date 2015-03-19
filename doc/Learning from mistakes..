@@ -90,6 +90,52 @@
        6.2.1 while-flag to fix order related bug (better performance)
        6.2.2 Code switch: switching the order of certain code statements
    6.3 Algorithm/Data-structure design change:
+       6.3.1 Finding 10:
+       	     6.3.1.1 The most common fix strategy (19 out of 31 cases) for the examined deadlock bugs is to let one thread
+	     give up acquiring one resource, such as a lock. This strategy is simple, but it may introduce other non-deadlock
+	     bugs.   
+	     6.3.1.2 We need to pay attention to the correctness of some "fixed" deadlock bugs
+   6.4 Mistaked during bug fixing
+       6.4.1 Collected all buggy patches of Mozilla
+       6.4.2 Out of 23 patches, 6 of them decrease probability of occurence, 5 introduce new concurrency bugs, other 12 introduce
+       new non-concurrent bugs
+       6.4.3 bug avoidance
+       	     6.4.3.1 Finding 11:
+	     	     6.4.3.1.1 TM can help avoid many concurrency bugs (41 out of 105)
+             	     6.4.3.1.2 Although TM is not a panacea, it can ease programmers correctly expressing their synchronization
+		     intentions in many cases, and help avoid a big portion of concurrency bugs.
+	     6.4.3.2 Finding 12:
+	     	     6.4.3.2.1 TM can potentially help to avoid many concurrency bugs(44 out out 105)
+		     6.4.3.2.2 TM design can combine system supports and other techniques to solve some of these concerns,
+		     and further ease the concurrent programming
+	     6.4.3.3 Finding 13:
+	     	     6.4.3.3.1 20 out of 105 conc. bugs that we examined cannot benefit from the basic TM designs, because the
+		     violated programmers' intentions, such as order intentions, cannot be guaranteed by basic TM
+		     6.4.3.3.2 Apart from atomicity intensions, there is also a significant need for concurrent programming
+		     language features to help programmers express order intentions easily.
+7. Other characteristics
+   7.1 Bug impacts
+       7.1.1 34 crash, 37 hangs
+   7.2 Some concurrency bugs are very difficult to reproduce
+       7.2.1 "I develop Mozilla full time all day, and I get this bug only once a day"
+       7.2.2 "I saw it only once ever on g. Perhaps the dual processor of g makes it occur"
+   7.3 Testcases are critical to bug diagnosis
+       7.3.1 often such bugs have poor description (developers cannot reproduce them)
+   7.4 Programmers lack diagnosis tools
+8 Related work
+  8.1 Bug characteristic studies
+      8.1.1 a lot of work has been done for large software systems
+      8.1.2 in the previous study only 12 concurrency bugs were collected from: MySQL, GNOME, Apache
+  8.2 Improving concurrent systems reliability
+      8.2.1 Trade-off between testing complexity and bug exposing capability
+      8.2.2 AtomicSet, Autolocker
+9 Future work
+  9.1 Bug detection tool
+  9.2 testing of concurrent programs pairwise
+  9.3 better language features  
+       	     
+       
+
        
        
        
