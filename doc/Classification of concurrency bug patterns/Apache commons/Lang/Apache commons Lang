@@ -1,0 +1,26 @@
+1. query: project=LANG AND text ~ race AND status in (Open, "In Progress", Reopened) ORDER BY created DESC
+	Improvement LANG-1086
+    	Remove busy wait from AtomicSafeInitializer.get()
+	1. The idea is to use CountDownLatch synchronization instead of the while loop which makes threads waste
+	See atomic safe initializer patch: AtomicSafeInitializer.patch
+	2. If condition in the while loop is always evaluated to true this could possibly lead to a jvm deadlock
+	3. The main concern with the implementation is that it introduces a blocking-wait
+	4. Benchmarks for both versions of the class do not show a significant change in the performance:
+		not changed version of classes, 10000 cycles, 20 concurrent threads: 10150
+		changed version of classes, 10000 cycles, 20 concurrent threads: 10143
+	5. The author of the change wrote two additional test cases:
+		5.1 The first one shows how one thread waits on the initialize()
+		method of the other.
+		5.2 The other one shows how InterruptedException can be used to avoid a deadlock 	
+	See patches: 
+		AbstractConcurrentInitializerTest.patch
+		AtomicInitializerTest.patch
+		AtomicSafeInitializer.patch
+		AtomicSafeInitializerTest.patch	
+	
+1. query: project=LANG AND text ~ concurrency AND status in (Open, "In Progress", Reopened) ORDER BY created DESC     
+	
+    	Bug LANG-806
+    	RandomStringUtils can enter infinite loop if chosen char does not meet letter/digit requirements
+	The bug has nothing to do with concurrency
+    	

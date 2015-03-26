@@ -1,0 +1,136 @@
+--- /home/alexander/Libraries/commons-lang3-3.3.2-src/src/main/java/org/apache/commons/lang3/concurrent/AtomicSafeInitializer.java
++++ /home/alexander/Libraries/changed/AtomicSafeInitializer.java
+@@ -1,12 +1,12 @@
+ /*
+  * Licensed to the Apache Software Foundation (ASF) under one or more
+- * contributor license agreements.  See the NOTICE file distributed with
++ * contributor license agreements. See the NOTICE file distributed with
+  * this work for additional information regarding copyright ownership.
+  * The ASF licenses this file to You under the Apache License, Version 2.0
+  * (the "License"); you may not use this file except in compliance with
+- * the License.  You may obtain a copy of the License at
++ * the License. You may obtain a copy of the License at
+  *
+- *      http://www.apache.org/licenses/LICENSE-2.0
++ * http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+@@ -15,9 +15,8 @@
+  * limitations under the License.
+  */
+ package org.apache.commons.lang3.concurrent;
+-
++import java.util.concurrent.CountDownLatch;
+ import java.util.concurrent.atomic.AtomicReference;
+-
+ /**
+  * <p>
+  * A specialized {@code ConcurrentInitializer} implementation which is similar
+@@ -50,48 +49,65 @@
+  * </p>
+  *
+  * @since 3.0
+- * @version $Id: AtomicSafeInitializer.java 1309977 2012-04-05 17:53:39Z ggregory $
++ * @version $Id$
+  * @param <T> the type of the object managed by this initializer class
+  */
+ public abstract class AtomicSafeInitializer<T> implements
+-        ConcurrentInitializer<T> {
+-    /** A guard which ensures that initialize() is called only once. */
+-    private final AtomicReference<AtomicSafeInitializer<T>> factory =
+-            new AtomicReference<AtomicSafeInitializer<T>>();
+-
+-    /** Holds the reference to the managed object. */
+-    private final AtomicReference<T> reference = new AtomicReference<T>();
+-
+-    /**
+-     * Get (and initialize, if not initialized yet) the required object
+-     *
+-     * @return lazily initialized object
+-     * @throws ConcurrentException if the initialization of the object causes an
+-     * exception
+-     */
+-    @Override
+-    public final T get() throws ConcurrentException {
+-        T result;
+-
+-        while ((result = reference.get()) == null) {
+-            if (factory.compareAndSet(null, this)) {
+-                reference.set(initialize());
+-            }
+-        }
+-
+-        return result;
+-    }
+-
+-    /**
+-     * Creates and initializes the object managed by this
+-     * {@code AtomicInitializer}. This method is called by {@link #get()} when
+-     * the managed object is not available yet. An implementation can focus on
+-     * the creation of the object. No synchronization is needed, as this is
+-     * already handled by {@code get()}. This method is guaranteed to be called
+-     * only once.
+-     *
+-     * @return the managed data object
+-     * @throws ConcurrentException if an error occurs during object creation
+-     */
+-    protected abstract T initialize() throws ConcurrentException;
++ConcurrentInitializer<T> {
++	/** A guard which ensures that initialize() is called only once. */
++	private final AtomicReference<AtomicSafeInitializer<T>> factory =
++			new AtomicReference<AtomicSafeInitializer<T>>();
++	/** Holds the reference to the managed object. */
++	private final AtomicReference<T> reference = new AtomicReference<T>();
++	/** Holds the exception that terminated the initialize() method, if an exception was thrown */
++	private final AtomicReference<ConcurrentException> referenceExc = new AtomicReference<ConcurrentException>();
++	/** Latch for those threads waiting for initialization to complete. */
++	private final CountDownLatch latch = new CountDownLatch(1);
++	/**
++	 * Get (and initialize, if not initialized yet) the required object
++	 *
++	 * @return lazily initialized object
++	 * @throws ConcurrentException if the initialization of the object causes an
++	 * exception or the thread is interrupted waiting for another thread to
++	 * complete the initialization
++	 */
++	@Override
++	public final T get() throws ConcurrentException {
++		T result;
++		if ((result = reference.get()) == null) {
++			if (factory.compareAndSet(null, this)) {
++				try {
++					reference.set(result = initialize());
++				} catch ( ConcurrentException exc ) {
++					referenceExc.set(exc);
++					throw exc;
++				} finally {
++					latch.countDown();
++				}
++			} else {
++				try {
++					latch.await();
++					if ( referenceExc.get() != null ) {
++						throw new ConcurrentException(referenceExc.get().getMessage(), referenceExc.get().getCause());
++					}
++					result = reference.get();
++				} catch (InterruptedException intExc) {
++					throw new ConcurrentException(intExc);
++				}
++			}
++		}
++		return result;
++	}
++	/**
++	 * Creates and initializes the object managed by this
++	 * {@code AtomicInitializer}. This method is called by {@link #get()} when
++	 * the managed object is not available yet. An implementation can focus on
++	 * the creation of the object. No synchronization is needed, as this is
++	 * already handled by {@code get()}. This method is guaranteed to be called
++	 * only once.
++	 *
++	 * @return the managed data object
++	 * @throws ConcurrentException if an error occurs during object creation
++	 */
++	protected abstract T initialize() throws ConcurrentException;
+ }
